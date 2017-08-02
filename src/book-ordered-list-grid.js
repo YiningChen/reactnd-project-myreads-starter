@@ -6,18 +6,24 @@ class BookOrderedList extends Component {
   render () {
     return (
       <ol className='books-grid'>
-        {this.props.books.map((book) => <BookListItem
-          authors={book.authors}
-          title={book.title}
-          backgroundImage={book.imageLinks.thumbnail}
-        />)}
+        {this.props.books.map((book) =>
+          <BookListItem
+            id={book.id}
+            currentShelf={book.shelf}
+            updateStateWithBooks={this.props.updateStateWithBooks}
+            authors={book.authors}
+            title={book.title}
+            backgroundImage={book.imageLinks.thumbnail}
+          />
+        )}
       </ol>
     )
   }
 }
 
 BookOrderedList.propTypes = {
-  books: PropTypes.array
+  books: PropTypes.array,
+  updateStateWithBooks: PropTypes.func
 }
 
 export default BookOrderedList

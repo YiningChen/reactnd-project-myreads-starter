@@ -30,12 +30,19 @@ class BooksApp extends React.Component {
     return shelves
   }
 
+  updateStateWithBooks () {
+    BooksAPI.getAll().then((data) => {
+      const shelves = this.organizeIntoShelves(data)
+      this.setState(shelves)
+    })
+  }
+
   render () {
     console.warn(this.state)
     return (
       <div className='app'>
         <Route exact path='/' render={() => (
-          <ListBooks shelves={this.state} />
+          <ListBooks shelves={this.state} updateStateWithBooks={this.updateStateWithBooks.bind(this)} />
         )} />
         <Route path='/search' component={SearchBooks} />
       </div>
@@ -43,10 +50,7 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount () {
-    BooksAPI.getAll().then(data => {
-      const shelves = this.organizeIntoShelves(data)
-      this.setState(shelves)
-    })
+    this.updateStateWithBooks()
   }
 }
 
