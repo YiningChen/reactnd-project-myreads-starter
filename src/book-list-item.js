@@ -6,7 +6,7 @@ class BookListItem extends Component {
   handleOnChange (event) {
     const newShelf = event.target.value
     const currentShelf = this.props.currentShelf
-    if (newShelf && newShelf !== 'none' && newShelf !== currentShelf) {
+    if (newShelf && newShelf !== currentShelf) {
       BooksAPI.update({id: this.props.id}, newShelf)
         .then(this.props.updateStateWithBooks)
     }
