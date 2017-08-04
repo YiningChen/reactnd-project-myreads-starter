@@ -36,7 +36,7 @@ class BookListItem extends Component {
             </div>
           </div>
           <div className='book-title'>{title}</div>
-          <div className='book-authors'>{authors.join(', ')}</div>
+          <div className='book-authors'>{authors && authors.join(', ')}</div>
         </div>
       </li>
     )
@@ -47,7 +47,7 @@ BookListItem.propTypes = {
   id: PropTypes.string,
   currentShelf: PropTypes.string,
   updateStateWithBooks: PropTypes.func,
-  authors: PropTypes.string,
+  authors: PropTypes.array,
   title: PropTypes.string,
   backgroundImage: PropTypes.string
 }

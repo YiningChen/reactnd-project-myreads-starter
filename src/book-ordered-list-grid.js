@@ -8,12 +8,13 @@ class BookOrderedList extends Component {
       <ol className='books-grid'>
         {this.props.books.map((book) =>
           <BookListItem
+            key={book.id}
             id={book.id}
             currentShelf={book.shelf}
             updateStateWithBooks={this.props.updateStateWithBooks}
             authors={book.authors}
             title={book.title}
-            backgroundImage={book.imageLinks.thumbnail}
+            backgroundImage={book.imageLinks && book.imageLinks.thumbnail}
           />
         )}
       </ol>
