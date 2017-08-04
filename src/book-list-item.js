@@ -13,7 +13,7 @@ class BookListItem extends Component {
   }
 
   render () {
-    const { authors, title, backgroundImage } = this.props
+    const { currentShelf, authors, title, backgroundImage } = this.props
     const style = {
       width: 128,
       height: 193,
@@ -26,8 +26,8 @@ class BookListItem extends Component {
           <div className='book-top'>
             <div className='book-cover' style={style} />
             <div className='book-shelf-changer'>
-              <select onChange={this.handleOnChange.bind(this)}>
-                <option value='none' selected='selected' disabled>Move to...</option>
+              <select value={currentShelf} onChange={this.handleOnChange.bind(this)}>
+                <option value='none' disabled>Move to...</option>
                 <option value='currentlyReading'>Currently Reading</option>
                 <option value='wantToRead'>Want to Read</option>
                 <option value='read'>Read</option>
