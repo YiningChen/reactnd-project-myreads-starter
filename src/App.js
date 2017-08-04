@@ -39,12 +39,15 @@ class BooksApp extends React.Component {
 
   render () {
     console.warn(this.state)
+    const boundUpdateState = this.updateStateWithBooks.bind(this)
     return (
       <div className='app'>
         <Route exact path='/' render={() => (
-          <ListBooks shelves={this.state} updateStateWithBooks={this.updateStateWithBooks.bind(this)} />
+          <ListBooks shelves={this.state} updateStateWithBooks={boundUpdateState} />
         )} />
-        <Route path='/search' component={SearchBooks} />
+        <Route path='/search' render={() => (
+          <SearchBooks updateStateWithBooks={boundUpdateState} />
+        )} />
       </div>
     )
   }
