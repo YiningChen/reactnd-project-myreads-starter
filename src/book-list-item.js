@@ -15,8 +15,6 @@ class BookListItem extends Component {
   render () {
     const { currentShelf, authors, title, backgroundImage } = this.props
     const style = {
-      width: 128,
-      height: 193,
       backgroundImage: `url("${backgroundImage}")`
     }
 
