@@ -38,7 +38,6 @@ class BooksApp extends React.Component {
   }
 
   render () {
-    console.warn(this.state)
     const boundUpdateState = this.updateStateWithBooks.bind(this)
     return (
       <div className='app'>
