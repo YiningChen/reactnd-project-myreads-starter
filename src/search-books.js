@@ -13,10 +13,32 @@ class SearchBooks extends Component {
     }
   }
 
+  // when searching 'react' - results contain duplicates
+  dedupeSearchResults (results) {
+    const existingIDs = {}
+    const dedupedResults = []
+    // sometimes api returns object instead of array
+    results.forEach && results.forEach(result => {
+      if (!existingIDs[result.id]) {
+        existingIDs[result.id] = true
+        dedupedResults.push(result)
+      }
+    })
+    return dedupedResults
+  }
+
   handleChange (event) {
     const search = event.target.value
     this.setState({search})
-    BooksAPI.search(search).then((results) => this.setState({searchResults: results}))
+
+    if (search) {
+      BooksAPI.search(search).then((results) => {
+        const dedupedResults = this.dedupeSearchResults(results)
+        this.setState({searchResults: dedupedResults})
+      })
+    } else {
+      this.setState({searchResults: []})
+    }
   }
 
   render () {
