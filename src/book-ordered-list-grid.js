@@ -12,7 +12,7 @@ class BookOrderedList extends Component {
       <ol className='books-grid'>
         {this.props.books.map((book) =>
           <BookListItem
-            key={book.id}
+            key={`${book.id}-${book.title}-${book.shelf}`}
             id={book.id}
             currentShelf={book.shelf}
             updateStateWithBooks={this.props.updateStateWithBooks}
