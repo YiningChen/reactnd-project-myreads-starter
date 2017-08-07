@@ -4,6 +4,10 @@ import BookListItem from './book-list-item'
 
 class BookOrderedList extends Component {
   render () {
+    if (!this.props.books || !this.props.books.map) {
+      return null
+    }
+
     return (
       <ol className='books-grid'>
         {this.props.books.map((book) =>
