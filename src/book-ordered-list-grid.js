@@ -4,14 +4,11 @@ import BookListItem from './book-list-item'
 
 class BookOrderedList extends Component {
   render () {
-    if (!this.props.books || !this.props.books.map) {
-      return null
-    }
-
     return (
       <ol className='books-grid'>
-        {this.props.books.map((book) =>
-          <BookListItem
+        {this.props.ids.map((id) => {
+          const book = this.props.booksByID[id]
+          return <BookListItem
             key={`${book.id}-${book.title}-${book.shelf}`}
             id={book.id}
             currentShelf={book.shelf}
@@ -20,14 +17,15 @@ class BookOrderedList extends Component {
             title={book.title}
             backgroundImage={book.imageLinks && book.imageLinks.thumbnail}
           />
-        )}
+        })}
       </ol>
     )
   }
 }
 
 BookOrderedList.propTypes = {
-  books: PropTypes.array,
+  booksByID: PropTypes.object,
+  ids: PropTypes.array,
   updateStateWithBooks: PropTypes.func
 }
 

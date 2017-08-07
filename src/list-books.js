@@ -5,7 +5,8 @@ import BookOrderedList from './book-ordered-list-grid'
 class ListBooks extends Component {
   render () {
     const { currentlyReading, wantToRead, read } = this.props.shelves
-    const updateStateWithBooks = this.props.updateStateWithBooks
+    const { booksByID, updateStateWithBooks } = this.props
+
     return (
       <div className='list-books'>
         <div className='list-books-title'>
@@ -16,19 +17,19 @@ class ListBooks extends Component {
             <div className='bookshelf'>
               <h2 className='bookshelf-title'>Currently Reading</h2>
               <div className='bookshelf-books'>
-                <BookOrderedList books={currentlyReading} updateStateWithBooks={updateStateWithBooks} />
+                <BookOrderedList booksByID={booksByID} ids={currentlyReading} updateStateWithBooks={updateStateWithBooks} />
               </div>
             </div>
             <div className='bookshelf'>
               <h2 className='bookshelf-title'>Want to Read</h2>
               <div className='bookshelf-books'>
-                <BookOrderedList books={wantToRead} updateStateWithBooks={updateStateWithBooks} />
+                <BookOrderedList booksByID={booksByID} ids={wantToRead} updateStateWithBooks={updateStateWithBooks} />
               </div>
             </div>
             <div className='bookshelf'>
               <h2 className='bookshelf-title'>Read</h2>
               <div className='bookshelf-books'>
-                <BookOrderedList books={read} updateStateWithBooks={updateStateWithBooks} />
+                <BookOrderedList booksByID={booksByID} ids={read} updateStateWithBooks={updateStateWithBooks} />
               </div>
             </div>
           </div>

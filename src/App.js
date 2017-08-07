@@ -9,13 +9,26 @@ class BooksApp extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentlyReading: [],
-      wantToRead: [],
-      read: []
+      booksByID: {},
+      shelves: {
+        currentlyReading: [],
+        wantToRead: [],
+        read: []
+      }
     }
   }
 
-  organizeIntoShelves (data) {
+  updateBooksWith (data, overwrite) {
+    this.setState(state => {
+      const booksByID = state.booksByID
+      data.forEach(book => {
+        if (overwrite || !booksByID[book.id]) booksByID[book.id] = book
+      })
+      return { booksByID }
+    })
+  }
+
+  updateShelves (data) {
     const shelves = {
       currentlyReading: [],
       wantToRead: [],
@@ -24,16 +37,16 @@ class BooksApp extends React.Component {
 
     data.forEach(book => {
       const shelf = book.shelf
-      shelves[shelf] && shelves[shelf].push(book)
+      shelves[shelf] && shelves[shelf].push(book.id)
     })
 
-    return shelves
+    this.setState({ shelves })
   }
 
   updateStateWithBooks () {
     BooksAPI.getAll().then((data) => {
-      const shelves = this.organizeIntoShelves(data)
-      this.setState(shelves)
+      this.updateBooksWith(data, true)
+      this.updateShelves(data)
     })
   }
 
@@ -42,17 +55,26 @@ class BooksApp extends React.Component {
     return (
       <div className='app'>
         <Route exact path='/' render={() => (
-          <ListBooks shelves={this.state} updateStateWithBooks={boundUpdateState} />
+          <ListBooks
+            booksByID={this.state.booksByID}
+            shelves={this.state.shelves}
+            updateStateWithBooks={boundUpdateState} />
         )} />
         <Route path='/search' render={() => (
-          <SearchBooks updateStateWithBooks={boundUpdateState} />
+          <SearchBooks
+            booksByID={this.state.booksByID}
+            updateBooksWith={this.updateBooksWith.bind(this)}
+            updateStateWithBooks={boundUpdateState} />
         )} />
       </div>
     )
   }
 
   componentDidMount () {
-    this.updateStateWithBooks()
+    BooksAPI.getAll().then((data) => {
+      this.updateBooksWith(data)
+      this.updateShelves(data)
+    })
   }
 }
 

@@ -13,32 +13,46 @@ class SearchBooks extends Component {
     }
   }
 
-  // when searching 'react' - results contain duplicates
-  dedupeSearchResults (results) {
+  isDuplicate (book, existingIDs) {
+    if (existingIDs[book.id]) {
+      return true
+    }
+    existingIDs[book.id] = true
+    return false
+  }
+
+  // 1. dedupe results, when searching 'react' - results contain duplicates
+  // 2. correct the shelf from app state
+  getDedupedIds (results) {
     const existingIDs = {}
-    const dedupedResults = []
-    // sometimes api returns object instead of array
-    results.forEach && results.forEach(result => {
-      if (!existingIDs[result.id]) {
-        existingIDs[result.id] = true
-        dedupedResults.push(result)
+    const ids = []
+
+    // check forEach b/c sometimes api returns object instead of array
+    results.forEach && results.forEach(book => {
+      if (!this.isDuplicate(book, existingIDs)) {
+        ids.push(book.id)
       }
     })
-    return dedupedResults
+
+    this.setState({searchResults: ids})
   }
 
   handleChange (event) {
     const search = event.target.value
     this.setState({search})
 
-    if (search) {
-      BooksAPI.search(search).then((results) => {
-        const dedupedResults = this.dedupeSearchResults(results)
-        this.setState({searchResults: dedupedResults})
-      })
-    } else {
+    if (!search) {
       this.setState({searchResults: []})
+      return // don't call api with empty string to avoid 403 error
     }
+
+    BooksAPI.search(search).then((results) => {
+      // only update state if using latest search query
+      if (search === this.state.search) {
+        this.props.updateBooksWith(results)
+        this.getDedupedIds(results)
+      }
+    })
   }
 
   render () {
@@ -51,7 +65,7 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className='search-books-results'>
-          <BookOrderedList books={this.state.searchResults} updateStateWithBooks={this.props.updateStateWithBooks} />
+          <BookOrderedList booksByID={this.props.booksByID} ids={this.state.searchResults} updateStateWithBooks={this.props.updateStateWithBooks} />
         </div>
       </div>
     )
@@ -59,6 +73,7 @@ class SearchBooks extends Component {
 }
 
 SearchBooks.propTypes = {
+  booksByID: PropTypes.object,
   updateStateWithBooks: PropTypes.func
 }
 
